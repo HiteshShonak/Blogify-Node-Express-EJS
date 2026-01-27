@@ -1,0 +1,192 @@
+<style>
+    html {
+        scrollbar-gutter: stable;
+    }
+    
+    .smooth-transition {
+        transition-property: all;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 300ms;
+    }
+
+    /* Standard Active Nav Pill: Sharp & Flat */
+    .nav-link.active {
+        background-color: #111827;
+        color: #ffffff !important;
+    }
+
+    /* Nav Link Hover Logic */
+    .nav-pill-hover:hover:not(.active) {
+        background-color: #f3f4f6;
+        color: #111827;
+    }
+
+    /* Mobile Nav Link Hover */
+    .nav-link-mobile:hover {
+        background-color: #f3f4f6;
+    }
+
+    /* Gradient Shimmer Button */
+    .cta-shimmer {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 9999px;
+        background: linear-gradient(135deg, #111827 0%, #374151 100%);
+        color: white;
+        border: none;
+        overflow: hidden;
+        font-size: 11px;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .cta-shimmer::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        transition: left 0.6s ease;
+    }
+
+    .cta-shimmer:hover::before {
+        left: 100%;
+    }
+
+    .cta-shimmer:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(17, 24, 39, 0.4);
+    }
+
+    .shimmer-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.3s ease;
+    }
+
+    .cta-shimmer:hover .shimmer-icon {
+        transform: translateX(4px);
+    }
+</style>
+
+
+<nav class="fixed top-0 left-0 right-0 z-50 flex justify-center md:mt-6 md:px-6">
+    <div class="bg-white/90 backdrop-blur-xl border-b md:border border-gray-200 shadow-sm md:shadow-lg w-full md:max-w-5xl md:rounded-full px-5 py-4 md:py-2.5 flex items-center justify-between transition-all duration-300">
+
+        <a href="/" class="flex items-center gap-2 group">
+            <div class="bg-gray-900 p-0.5 rounded-lg md:rounded-full group-hover:rotate-12 smooth-transition overflow-hidden">
+                
+                <img src="/images/logo.jpg" alt="Logo" class="w-8 h-8 object-cover rounded-full">
+            </div>
+            <span class="text-lg font-bold text-gray-900 tracking-tighter">Blogify</span>
+        </a>
+
+        <div class="hidden md:flex items-center gap-1">
+            <a href="/" class="nav-link nav-pill-hover px-5 py-2 rounded-full text-sm font-medium text-gray-600 smooth-transition">Home</a>
+            <a href="/blog/all" class="nav-link nav-pill-hover px-5 py-2 rounded-full text-sm font-medium text-gray-600 smooth-transition">All Posts</a>
+            
+            <% if (locals.user) { %>
+                <a href="/blog/add-blog" class="nav-link nav-pill-hover px-5 py-2 rounded-full text-sm font-medium text-gray-600 smooth-transition">Write</a>
+                <div class="w-px h-6 bg-gray-200 mx-3"></div>
+                
+                <div class="relative group h-full flex items-center">
+                    <button class="flex items-center gap-2 pl-1 pr-3 py-1 rounded-full hover:bg-gray-100 border border-transparent transition-all focus:outline-none">
+                        <img src="<%= user.profileImageURL %>" alt="User" class="w-8 h-8 rounded-full object-cover border border-gray-200">
+                        <span class="text-sm font-bold text-gray-800"><%= user.fullName.split(' ')[0] %></span>
+                        <svg class="w-4 h-4 text-gray-400 group-hover:text-gray-900 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    
+                    <div class="absolute right-0 top-full mt-3 w-56 bg-white border border-gray-100 rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible smooth-transition transform origin-top-right z-50 overflow-hidden">
+                        <div class="px-5 py-4 border-b border-gray-50 bg-gray-50/50">
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Signed in as</p>
+                            <p class="text-sm font-bold text-gray-800 truncate"><%= user.email %></p>
+                        </div>
+                        <div class="p-2">
+                            <a href="/user/profile" class="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-xl">My Profile</a>
+                            <a href="/user/logout" class="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50 rounded-xl">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            <% } else { %>
+                <div class="flex items-center ml-4">
+                    <a href="/user/get-started" class="cta-shimmer group">
+                        <span>Get Started</span>
+                        <div class="shimmer-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                            </svg>
+                        </div>
+                    </a>
+                </div>
+            <% } %>
+        </div>
+
+        <button id="mobile-menu-btn" class="md:hidden text-gray-600 p-2 hover:bg-gray-100 rounded-full transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+        </button>
+    </div>
+</nav>
+
+
+<div id="mobile-menu-overlay" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[60] hidden transition-opacity opacity-0 duration-300"></div>
+
+
+<div id="mobile-menu" class="fixed top-0 right-0 h-full w-[85%] max-w-xs bg-white shadow-2xl z-[70] transform translate-x-full transition-transform duration-300 ease-out flex flex-col">
+    <div class="p-6 flex justify-between items-center border-b border-gray-100">
+        <div class="flex items-center gap-2">
+            <img src="/images/favicon.webp" alt="Logo" class="w-8 h-8 object-cover rounded-full bg-gray-900 p-0.5">
+            <span class="text-xl font-black text-gray-900 tracking-tighter">Blogify</span>
+        </div>
+        <button id="close-menu-btn" class="text-gray-400 hover:text-gray-900 p-2 rounded-full hover:bg-gray-100 smooth-transition">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+    </div>
+
+    <div class="flex flex-col p-6 gap-3 overflow-y-auto flex-1">
+        <% if (locals.user) { %>
+            <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-2xl border border-gray-100 mb-4">
+                <img src="<%= user.profileImageURL %>" class="w-12 h-12 rounded-full border-2 border-white shadow-sm">
+                <div class="overflow-hidden">
+                    <p class="text-base font-bold text-gray-900 truncate"><%= user.fullName %></p>
+                    <p class="text-xs text-gray-500 truncate"><%= user.email %></p>
+                </div>
+            </div>
+        <% } %>
+
+        <a href="/" class="nav-link-mobile px-4 py-3 text-lg font-bold text-gray-700 rounded-xl hover:bg-gray-50 transition-colors">Home</a>
+        <a href="/blog/all" class="nav-link-mobile px-4 py-3 text-lg font-bold text-gray-700 rounded-xl hover:bg-gray-50 transition-colors">All Posts</a>
+        
+        <% if (locals.user) { %>
+            <a href="/blog/add-blog" class="nav-link-mobile px-4 py-3 text-lg font-bold text-gray-700 rounded-xl hover:bg-gray-50 transition-colors">Write</a>
+            
+            <div class="mt-auto pt-6 space-y-2">
+                <a href="/user/profile" class="block w-full text-center py-4 bg-gray-100 text-gray-900 font-bold uppercase tracking-wider text-xs rounded-xl hover:bg-gray-200 transition-colors">
+                    My Profile
+                </a>
+                <a href="/user/logout" class="block w-full text-center py-4 bg-red-600 text-white font-bold uppercase tracking-wider text-xs rounded-xl hover:bg-red-700 transition-colors">
+                    Logout
+                </a>
+            </div>
+        <% } else { %>
+            <div class="mt-auto pt-10">
+                <a href="/user/get-started" class="block w-full text-center py-5 bg-gray-900 text-white font-black uppercase tracking-widest text-xs rounded-2xl shadow-xl hover:bg-gray-800 transition-colors">
+                    Get Started
+                </a>
+            </div>
+        <% } %>
+    </div>
+</div>
