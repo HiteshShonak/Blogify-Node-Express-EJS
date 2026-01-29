@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('partials/head') %>
+    
+    <script src="https://cdn.tiny.cloud/1/<%= locals.tinyMceKey %>/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+</head>
+<body class="bg-[#F9FAFB] text-gray-800 flex flex-col min-h-screen">
+
+    <%- include('partials/nav') %>
+
+    <main class="flex-grow container mx-auto px-4 md:px-8 mt-28 md:mt-32 mb-20">
+        <%- include('partials/blogForm', { blog: null }) %>
+    </main>
+
+    <%- include('partials/footer') %>
+</body>
+</html>
