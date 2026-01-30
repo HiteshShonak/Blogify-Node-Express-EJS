@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('partials/head') %>
+    <style>
+        /* Typography Scale */
+        .content-body h1 { font-size: 2.25rem; font-weight: 800; margin: 2.5rem 0 1rem; color: #111827; letter-spacing: -0.02em; line-height: 1.2; }
+        .content-body h2 { font-size: 1.75rem; font-weight: 700; margin: 2rem 0 1rem; color: #1F2937; }
+        .content-body p { margin-bottom: 1.5rem; line-height: 1.8; color: #374151; font-size: 1.125rem; }
+        
+        /* Mobile Adjustments */
+        @media (max-width: 640px) {
+            .content-body h1 { font-size: 1.75rem; margin-top: 2rem; }
+            .content-body h2 { font-size: 1.5rem; margin-top: 1.5rem; }
+            .content-body p { font-size: 1rem; line-height: 1.7; }
+        }
+
+        .content-body img { border-radius: 1rem; margin: 2.5rem 0; width: 100%; height: auto; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+        .content-body blockquote { border-left: 4px solid #000000; padding: 1.25rem 2rem; background: #F9FAFB; border-radius: 0 1rem 1rem 0; font-style: italic; color: #4B5563; margin: 2rem 0; }
+        .content-body ul, .content-body ol { margin-bottom: 1.5rem; padding-left: 1.5rem; color: #374151; }
+        .content-body li { margin-bottom: 0.5rem; }
+        
+        .fade-in-up { animation: fadeInUp 0.8s ease-out forwards; opacity: 0; transform: translateY(20px); }
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-white text-gray-800 font-sans antialiased flex flex-col min-h-screen">
+
+    <%- include('partials/nav') %>
+
+    <main class="flex-grow pt-32 pb-24">
+        
+        <article class="container mx-auto px-5 md:px-6 max-w-4xl">
+            
+            <div class="text-center mb-10 fade-in-up">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-50 border border-gray-100 text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-6">
+                    <span><%= new Date(blog.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %></span>
+                    <span>•</span>
+                    <% 
+                       const cleanText = blog.body.replace(/<[^>]+>/g, ' ');
+                       const wordCount = cleanText.trim().split(/\s+/).length;
+                       const readTime = Math.ceil(wordCount / 200);
+                    %>
+                    <span><%= readTime %> min read</span>
+                </div>
+
+                <h1 class="text-3xl sm:text-4xl md:text-6xl font-black text-gray-900 tracking-tight leading-tight mb-8 break-words">
+                    <%= blog.title %>
+                </h1>
+
+                <div class="flex items-center justify-center gap-3">
+                    <img src="<%= blog.createdBy.profileImageURL %>" class="w-10 h-10 rounded-full object-cover border border-gray-100 shadow-sm">
+                    <div class="text-left">
+                        <p class="text-sm font-bold text-gray-900"><%= blog.createdBy.fullName %></p>
+                        <p class="text-xs text-gray-500">Author</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative w-full aspect-video rounded-2xl md:rounded-[2rem] overflow-hidden shadow-xl shadow-gray-200 mb-12 md:mb-16 group fade-in-up" style="animation-delay: 0.1s;">
+                <img 
+                    src="<%= optimizeImage(blog.coverImageURL, 'detail') %>" 
+                    srcset="
+                        <%= optimizeImage(blog.coverImageURL, 'mobile') %> 600w,
+                        <%= optimizeImage(blog.coverImageURL, 'detail') %> 1200w
+                    "
+                    sizes="(max-width: 600px) 100vw, 800px"
+                    onerror="this.onerror=null;this.src='/images/default-cover.png';"
+                    class="absolute inset-0 w-full h-full object-cover"
+                >
+                
+                <% if (locals.user && (locals.user.role === 'ADMIN' || locals.user._id.toString() === blog.createdBy._id.toString())) { %>
+                    <div class="absolute top-4 right-4 flex gap-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
+                        <a href="/blog/edit/<%= blog._id %>" class="flex items-center gap-2 bg-white/90 backdrop-blur-md hover:bg-black hover:text-white text-gray-900 px-4 py-2 rounded-full shadow-lg transition-all text-xs font-bold uppercase tracking-wide">
+                            Edit
+                        </a>
+                        <a href="/blog/delete/<%= blog._id %>" 
+                           onclick="return confirm('Are you sure? This cannot be undone.');"
+                           class="flex items-center gap-2 bg-white/90 backdrop-blur-md hover:bg-red-600 hover:text-white text-red-600 px-4 py-2 rounded-full shadow-lg transition-all text-xs font-bold uppercase tracking-wide">
+                            Delete
+                        </a>
+                    </div>
+                <% } %>
+            </div>
+
+            <div class="content-body max-w-3xl mx-auto fade-in-up break-words" style="animation-delay: 0.2s;">
+                <%- blog.body %>
+            </div>
+
+            <div class="max-w-3xl mx-auto mt-16 mb-20">
+                <div class="bg-gray-50/80 border border-gray-100 rounded-3xl p-2 md:p-3 flex flex-col sm:flex-row items-center gap-4 sm:gap-0">
+                    
+                    <div class="w-full sm:w-auto px-6 py-3 flex items-center justify-center sm:justify-start gap-4 text-gray-400 border-b sm:border-b-0 sm:border-r border-gray-100 sm:pr-8">
+                        <div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-400">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                        </div>
+                        <div class="text-left leading-tight">
+                            <span class="block font-black text-gray-900 text-lg"><%= blog.views %></span>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400">Total Reads</span>
+                        </div>
+                    </div>
+
+                    <% if (locals.user) { %>
+                        <button id="like-btn" data-id="<%= blog._id %>" class="group flex-1 w-full sm:w-auto flex items-center justify-between px-6 py-2 bg-transparent hover:bg-white sm:rounded-r-3xl transition-all duration-300">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-white border border-gray-100 group-hover:border-red-100 group-hover:bg-red-50 flex items-center justify-center transition-colors">
+                                    <svg class="w-5 h-5 transform group-hover:scale-110 transition-transform duration-200 <%= blog.likes.includes(user._id) ? 'fill-red-500 text-red-500' : 'fill-transparent text-gray-400 group-hover:text-red-500' %>" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                    </svg>
+                                </div>
+                                <span class="text-sm font-bold text-gray-600 group-hover:text-gray-900 transition-colors">
+                                    <%= blog.likes.includes(user._id) ? 'Liked this story' : 'Enjoyed this?' %>
+                                </span>
+                            </div>
+                            
+                            <div class="flex items-center gap-2 pl-4 border-l border-gray-100">
+                                <span id="like-count" class="font-black text-xl text-gray-900"><%= blog.likes.length %></span>
+                            </div>
+                        </button>
+                    <% } else { %>
+                        <a href="/user/login" class="group flex-1 w-full sm:w-auto flex items-center justify-between px-6 py-2 bg-transparent hover:bg-white sm:rounded-r-3xl transition-all duration-300 cursor-pointer">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-white border border-gray-100 group-hover:border-red-100 group-hover:bg-red-50 flex items-center justify-center transition-colors">
+                                    <svg class="w-5 h-5 transform group-hover:scale-110 transition-transform duration-200 fill-transparent text-gray-400 group-hover:text-red-500" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="text-sm font-bold text-gray-600 group-hover:text-gray-900 transition-colors block">
+                                        Enjoyed this?
+                                    </span>
+                                    <span class="text-xs text-gray-400 group-hover:text-gray-600 transition-colors">
+                                        Log in to like
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center gap-2 pl-4 border-l border-gray-100">
+                                <span class="font-black text-xl text-gray-900"><%= blog.likes.length %></span>
+                            </div>
+                        </a>
+                    <% } %>
+                    
+                </div>
+            </div>
+
+            <div class="max-w-3xl mx-auto">
+                <h3 class="text-2xl font-bold text-gray-900 mb-10 flex items-center gap-3">
+                    Discussion 
+                    <span class="bg-gray-100 text-gray-600 text-sm font-bold py-1 px-3 rounded-full"><%= comments.length %></span>
+                </h3>
+
+                <% if (locals.user) { %>
+                    <form action="/blog/comment/<%= blog._id %>" method="POST" class="mb-16 relative group">
+                        
+                        <div class="absolute top-4 left-4 hidden md:block">
+                            <img src="<%= user.profileImageURL %>" class="w-10 h-10 rounded-full border border-gray-200 shadow-sm">
+                        </div>
+                        
+                        <textarea name="content" placeholder="Share your thoughts..." required
+                            class="w-full md:pl-16 p-6 bg-gray-50 rounded-2xl border-none focus:bg-white focus:ring-2 focus:ring-gray-900 min-h-[140px] resize-y transition-all outline-none text-gray-700 placeholder-gray-400 text-base"></textarea>
+                        
+                        <div class="absolute bottom-4 right-4">
+                            <button type="submit" class="bg-gray-900 text-white px-6 py-2.5 rounded-xl text-sm font-bold hover:bg-black transition-all shadow-lg transform active:scale-95">
+                                Post
+                            </button>
+                        </div>
+                    </form>
+                <% } else { %>
+                    <div class="bg-gray-50 rounded-2xl p-8 text-center mb-16 border border-dashed border-gray-200">
+                        <h4 class="text-lg font-bold text-gray-900 mb-2">Join the conversation</h4>
+                        <p class="text-gray-500 mb-6 text-sm">Sign in to share your thoughts.</p>
+                        <a href="/user/login" class="inline-block px-8 py-3 bg-gray-900 text-white rounded-xl text-sm font-bold hover:bg-black transition-colors shadow-lg">
+                            Log In
+                        </a>
+                    </div>
+                <% } %>
+
+                <div class="space-y-10">
+                    <% comments.forEach(comment => { %>
+                        <div class="flex gap-4 md:gap-6 group relative">
+                            <img src="<%= comment.createdBy.profileImageURL %>" class="w-10 h-10 md:w-12 md:h-12 rounded-full border border-gray-100 object-cover flex-shrink-0">
+                            <div class="flex-1">
+                                <div class="bg-white p-1 rounded-2xl">
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <span class="font-bold text-gray-900 text-sm"><%= comment.createdBy.fullName %></span>
+                                        <span class="text-xs text-gray-400">• <%= new Date(comment.createdAt).toLocaleDateString() %></span>
+                                    </div>
+                                    <p class="text-gray-700 text-sm leading-relaxed"><%= comment.content %></p>
+                                </div>
+                            </div>
+                            
+                            <% if (locals.user && (locals.user._id.toString() === blog.createdBy._id.toString() || locals.user._id.toString() === comment.createdBy._id.toString())) { %>
+                                <a href="/blog/comment/delete/<%= comment._id %>/<%= blog._id %>" 
+                                   class="absolute right-0 top-0 opacity-100 md:opacity-0 md:group-hover:opacity-100 p-2 text-gray-300 hover:text-red-500 transition-all bg-white rounded-full shadow-sm"
+                                   onclick="return confirm('Delete this comment?')"
+                                   title="Delete Comment">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                </a>
+                            <% } %>
+                        </div>
+                    <% }) %>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <%- include('partials/footer') %>
+
+    <script>
+        <% if (locals.user) { %>
+            const likeBtn = document.getElementById('like-btn');
+            const likeCount = document.getElementById('like-count');
+            const likeSvg = likeBtn?.querySelector('svg');
+            const likeText = likeBtn?.querySelector('span.text-sm');
+            
+            if(likeBtn) {
+                likeBtn.addEventListener('click', async () => {
+                    const blogId = likeBtn.dataset.id;
+                    try {
+                        const res = await fetch(`/blog/like/${blogId}`);
+                        const data = await res.json();
+                        
+                        if (data.status === 'success') {
+                            likeCount.innerText = data.likes;
+                            if (data.isLiked) {
+                                likeSvg.classList.add('fill-red-500', 'text-red-500');
+                                likeSvg.classList.remove('fill-transparent', 'text-gray-400');
+                                if(likeText) likeText.innerText = "Liked this story";
+                            } else {
+                                likeSvg.classList.remove('fill-red-500', 'text-red-500');
+                                likeSvg.classList.add('fill-transparent', 'text-gray-400');
+                                if(likeText) likeText.innerText = "Enjoyed this?";
+                            }
+                        }
+                    } catch (err) {
+                        console.error("Like Error", err);
+                    }
+                });
+            }
+        <% } %>
+    </script>
+</body>
+</html>

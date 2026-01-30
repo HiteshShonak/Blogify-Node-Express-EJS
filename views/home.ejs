@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('partials/head') %>
+    <style>
+        /* 1. PAPER GRAIN TEXTURE */
+        .bg-noise {
+            background-color: #F9FAFB;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+        }
+
+        /* 2. Updated Aesthetic: Monochrome Gradient */
+        .text-gradient {
+            background: linear-gradient(to right, #000000, #4B5563);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .editorial-leading {
+            line-height: 1.6;
+        }
+
+        /* 3. Background Blobs Animation */
+        @keyframes blob {
+            0% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+            100% { transform: translate(0px, 0px) scale(1); }
+        }
+        .animate-blob {
+            animation: blob 10s infinite;
+        }
+        .animation-delay-2000 {
+            animation-delay: 2s;
+        }
+        
+        /* 4. Soft Glow (Neutral Shadow) */
+        .soft-glow {
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.15);
+        }
+
+        /* 5. Typography Balance (New Upgrade) */
+        .text-balance {
+            text-wrap: balance;
+        }
+    </style>
+</head>
+<body class="bg-noise text-gray-800 flex flex-col min-h-screen overflow-x-hidden">
+
+    <%- include('partials/nav') %>
+
+    <main class="flex-grow container mx-auto px-5 md:px-8 mt-24 md:mt-36 mb-20 min-h-screen">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center mb-24 md:mb-36">
+            
+            <div class="space-y-6 md:space-y-8 relative z-10 order-1">
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-gray-200 shadow-sm">
+                    <span class="w-1.5 h-1.5 rounded-full bg-black"></span>
+                    <span class="text-[10px] md:text-xs font-bold text-gray-900 tracking-widest uppercase">The Creative Space</span>
+                </div>
+
+                <h1 class="text-4xl md:text-7xl font-bold text-gray-900 tracking-tight leading-[1.15] md:leading-[1.1] text-balance">
+                    Where words find <br>
+                    <span class="text-gradient">their meaning.</span>
+                </h1>
+                
+                <p class="text-base md:text-lg text-gray-600 max-w-lg editorial-leading text-balance">
+                    A minimal canvas for storytellers. Connect with ideas that matter, distilled into their purest form.
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                    <% if (!locals.user) { %>
+                        <a href="/user/signup" class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3.5 md:py-4 text-sm font-bold text-white transition-all bg-gray-900 rounded-full hover:bg-black hover:shadow-xl hover:shadow-gray-900/20 hover:-translate-y-0.5">
+                            Start Creating
+                        </a>
+                        <a href="/blog/all" class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3.5 md:py-4 text-sm font-bold text-gray-900 transition-all bg-white border border-gray-200 rounded-full hover:bg-gray-50 hover:border-gray-300">
+                            Explore Collection
+                        </a>
+                    <% } else { %>
+                        <a href="/blog/add-blog" class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3.5 md:py-4 text-sm font-bold text-white transition-all bg-gray-900 rounded-full hover:bg-black shadow-lg shadow-gray-900/20 hover:-translate-y-0.5">
+                            Share Your Story
+                        </a>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="relative order-2 mt-4 lg:mt-0">
+                <div class="hidden lg:block absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-gray-200 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob"></div>
+                <div class="hidden lg:block absolute top-0 right-20 w-96 h-96 bg-gray-300 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob animation-delay-2000"></div>
+                
+                <div class="relative bg-white p-1.5 md:p-2 rounded-2xl md:rounded-3xl soft-glow transform lg:rotate-2 hover:rotate-0 transition-transform duration-700 ease-out border border-white">
+                    <img 
+                        src="/images/workspace-bg.webp" 
+                        alt="Writing Space" 
+                        fetchpriority="high"
+                        class="rounded-xl md:rounded-2xl w-full h-[280px] md:h-[500px] object-cover grayscale-[20%]"
+                    >
+                    
+                    <div class="absolute bottom-4 left-4 right-4 md:right-auto md:bottom-8 md:left-8 bg-white/95 backdrop-blur-md p-3 md:p-4 rounded-xl md:rounded-2xl shadow-xl border border-white/50 max-w-xs transform hover:scale-105 transition-transform duration-300">
+                        <div class="flex items-center gap-2 md:gap-3 mb-1 md:mb-2">
+                            <div class="w-6 h-6 md:w-8 md:h-8 rounded-full bg-gray-100 flex items-center justify-center text-black">
+                                <svg class="w-3 h-3 md:w-4 md:h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path></svg>
+                            </div>
+                            <span class="text-xs md:text-sm font-bold text-gray-900">Editor's Pick</span>
+                        </div>
+                        <p class="text-[10px] md:text-xs text-gray-500 leading-relaxed line-clamp-2 md:line-clamp-none">"The best platform for minimalists who just want to write."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex items-end justify-between mb-8 pb-4 border-b border-gray-200">
+            <div>
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="flex h-2 w-2 relative">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                    </span>
+                    <h2 class="text-[10px] md:text-xs font-bold text-red-500 uppercase tracking-wider">Happening Now</h2>
+                </div>
+                <h3 class="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">Current Favorites</h3>
+            </div>
+            
+            <a href="/blog/all" class="hidden md:flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-black transition-colors group">
+                Discover More
+                <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-black group-hover:text-white transition-all duration-300 group-hover:translate-x-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </div>
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
+            <% if (locals.blogs && locals.blogs.length > 0) { %>
+                <% blogs.forEach(blog => { %>
+                    <%- include('partials/blogCard', { blog: blog }) %>
+                <% }) %>
+            <% } else { %>
+                <div class="col-span-full py-16 md:py-24 text-center">
+                    <div class="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 bg-gray-50 rounded-full mb-6 border border-gray-100">
+                        <svg class="w-6 h-6 md:w-8 md:h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                    </div>
+                    <h3 class="text-lg md:text-xl font-medium text-gray-900">It's quiet here...</h3>
+                    <p class="text-sm md:text-base text-gray-500 mt-2">Start the trend by writing the first story.</p>
+                </div>
+            <% } %>
+        </div>
+
+        <div class="mt-10 text-center md:hidden">
+            <a href="/blog/all" class="inline-flex w-full justify-center px-6 py-3.5 bg-white border border-gray-200 text-gray-800 font-bold text-sm rounded-xl shadow-sm hover:bg-gray-50 transition-colors">
+                View All Stories
+            </a>
+        </div>
+
+    </main>
+
+    <%- include('partials/footer') %>
+
+</body>
+</html>
