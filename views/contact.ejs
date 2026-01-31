@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('partials/head') %>
+    <style>
+        /* 1. PAPER GRAIN TEXTURE */
+        .bg-noise {
+            background-color: #F9FAFB;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+        }
+
+        /* 2. Black Monochrome Gradient */
+        .text-gradient {
+            background: linear-gradient(to right, #000000, #4B5563);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* 3. Soft Glow */
+        .soft-glow { box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.1); }
+
+        /* 4. Input Field Styling */
+        .input-field {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            transition: all 0.2s ease;
+        }
+        .input-field:focus, .custom-select-active {
+            background: #ffffff;
+            border-color: #111827; /* Black border */
+            box-shadow: 0 0 0 1px #111827; /* Sharp black ring */
+        }
+
+        .fade-in { animation: fadeIn 0.8s ease-out forwards; opacity: 0; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-noise text-gray-800 flex flex-col min-h-screen antialiased">
+
+    <%- include('partials/nav') %>
+
+    <main class="flex-grow pt-32 pb-24">
+        
+        <div class="container mx-auto px-6 max-w-6xl min-h-screen">
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+                
+                <div class="fade-in space-y-12 lg:sticky lg:top-32">
+                    <div>
+                        <span class="inline-block px-4 py-1.5 mb-6 text-[11px] font-bold tracking-[0.2em] uppercase text-gray-900 bg-white border border-gray-200 rounded-full shadow-sm">
+                            Contact Us
+                        </span>
+                        <h1 class="text-5xl md:text-6xl font-black text-gray-900 leading-tight tracking-tighter mb-6">
+                            Let's start a <br> <span class="text-gradient">conversation.</span>
+                        </h1>
+                        <p class="text-lg text-gray-500 leading-relaxed max-w-md">
+                            Have a question, a feature request, or just want to say hi? We read every message and will get back to you within 24 hours.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div class="p-6 bg-white border border-gray-200 rounded-3xl hover:shadow-lg transition-shadow group cursor-pointer">
+                            <div class="w-10 h-10 bg-gray-100 text-black rounded-full flex items-center justify-center mb-4 transition-colors">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            </div>
+                            <h3 class="font-bold text-gray-900 mb-1">General Support</h3>
+                            <a href="mailto:contact.blogify@gmail.com" class="text-sm text-gray-500 hover:text-black transition-colors">contact.blogify@gmail.com</a>
+                        </div>
+
+                        <div class="p-6 bg-white border border-gray-200 rounded-3xl hover:shadow-lg transition-shadow group cursor-pointer">
+                            <div class="w-10 h-10 bg-gray-100 text-black rounded-full flex items-center justify-center mb-4 transition-colors">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+                            </div>
+                            <h3 class="font-bold text-gray-900 mb-1">Press & Media</h3>
+                            <a href="mailto:contact.blogify@gmail.com" class="text-sm text-gray-500 hover:text-black transition-colors">contact.blogify@gmail.com</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fade-in bg-white p-8 md:p-10 rounded-[2.5rem] soft-glow border border-gray-100 relative" style="animation-delay: 0.2s;">
+                    
+                    <form id="contact-form" class="relative z-10 space-y-6">
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1">Full Name</label>
+                                <input type="text" id="name" placeholder="Your full name" required
+                                    class="input-field w-full px-5 py-4 rounded-xl text-sm font-bold text-gray-900 placeholder-gray-400 focus:outline-none">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1">Email Address</label>
+                                <input type="email" id="email" placeholder="you@example.com" required
+                                    class="input-field w-full px-5 py-4 rounded-xl text-sm font-bold text-gray-900 placeholder-gray-400 focus:outline-none">
+                            </div>
+                        </div>
+
+                        <div class="space-y-2 relative" id="custom-select-container">
+                            <label class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1">Topic</label>
+                            
+                            <input type="hidden" id="topic" value="General Inquiry">
+
+                            <div id="dropdown-trigger" class="input-field w-full px-5 py-4 rounded-xl text-sm font-bold text-gray-900 flex justify-between items-center cursor-pointer select-none">
+                                <span id="selected-text">General Inquiry</span>
+                                <svg class="w-4 h-4 text-gray-500 transition-transform duration-200 transform" id="dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+
+                            <div id="dropdown-menu" class="absolute z-20 w-full mt-2 bg-white border border-gray-100 rounded-xl shadow-xl overflow-hidden hidden transform origin-top transition-all">
+                                <div class="dropdown-item px-5 py-3 hover:bg-gray-50 text-sm font-medium text-gray-700 hover:text-black cursor-pointer transition-colors" data-value="General Inquiry">General Inquiry</div>
+                                <div class="dropdown-item px-5 py-3 hover:bg-gray-50 text-sm font-medium text-gray-700 hover:text-black cursor-pointer transition-colors" data-value="Bug Report">Bug Report</div>
+                                <div class="dropdown-item px-5 py-3 hover:bg-gray-50 text-sm font-medium text-gray-700 hover:text-black cursor-pointer transition-colors" data-value="Feature Request">Feature Request</div>
+                                <div class="dropdown-item px-5 py-3 hover:bg-gray-50 text-sm font-medium text-gray-700 hover:text-black cursor-pointer transition-colors" data-value="Partnership">Partnership</div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1">Message</label>
+                            <textarea id="message" rows="5" placeholder="Tell us how we can help..." required
+                                class="input-field w-full px-5 py-4 rounded-xl text-sm font-medium text-gray-900 placeholder-gray-400 focus:outline-none resize-none"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full py-4 bg-gray-900 text-white font-bold rounded-xl hover:bg-black shadow-xl shadow-gray-900/10 transform hover:-translate-y-1 transition-all duration-300">
+                            Send Message
+                        </button>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <%- include('partials/footer') %>
+
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300">
+        <div class="bg-white border-l-4 border-gray-900 text-gray-800 px-6 py-4 rounded shadow-2xl flex items-center gap-4">
+            <span id="toast-msg" class="font-medium text-sm">Message sent successfully!</span>
+        </div>
+    </div>
+
+    <script>
+        // --- CUSTOM DROPDOWN LOGIC ---
+        const container = document.getElementById('custom-select-container');
+        const trigger = document.getElementById('dropdown-trigger');
+        const menu = document.getElementById('dropdown-menu');
+        const options = document.querySelectorAll('.dropdown-item');
+        const hiddenInput = document.getElementById('topic');
+        const selectedText = document.getElementById('selected-text');
+        const arrow = document.getElementById('dropdown-arrow');
+
+        // Toggle Menu
+        trigger.addEventListener('click', () => {
+            const isHidden = menu.classList.contains('hidden');
+            if (isHidden) {
+                menu.classList.remove('hidden');
+                trigger.classList.add('custom-select-active');
+                arrow.classList.add('rotate-180');
+            } else {
+                closeDropdown();
+            }
+        });
+
+        // Select Option
+        options.forEach(option => {
+            option.addEventListener('click', () => {
+                selectedText.textContent = option.textContent;
+                hiddenInput.value = option.getAttribute('data-value');
+                closeDropdown();
+            });
+        });
+
+        // Close when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!container.contains(e.target)) {
+                closeDropdown();
+            }
+        });
+
+        function closeDropdown() {
+            menu.classList.add('hidden');
+            trigger.classList.remove('custom-select-active');
+            arrow.classList.remove('rotate-180');
+        }
+
+        // --- FORM SUBMISSION LOGIC ---
+        document.getElementById('contact-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const btn = e.target.querySelector('button');
+            const originalText = btn.innerText;
+            
+            // Loading State
+            btn.innerText = "Sending...";
+            btn.disabled = true;
+            btn.classList.add('opacity-75', 'cursor-not-allowed');
+
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                topic: document.getElementById('topic').value, // Gets value from hidden input
+                message: document.getElementById('message').value
+            };
+
+            try {
+                const res = await fetch('/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    showToast('Message sent successfully!', false);
+                    e.target.reset();
+                    // Reset custom dropdown
+                    selectedText.textContent = "General Inquiry";
+                    hiddenInput.value = "General Inquiry";
+                } else {
+                    throw new Error(data.message || 'Failed to send');
+                }
+
+            } catch (err) {
+                console.error(err);
+                showToast('Failed to send message. Try again.', true);
+            } finally {
+                // Reset Button
+                btn.innerText = originalText;
+                btn.disabled = false;
+                btn.classList.remove('opacity-75', 'cursor-not-allowed');
+            }
+        });
+
+        function showToast(msg, isError) {
+            const toast = document.getElementById('toast');
+            const toastText = document.getElementById('toast-msg');
+            const toastBox = toast.querySelector('div');
+
+            toastText.innerText = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            
+            if (isError) {
+                toastBox.classList.replace('border-gray-900', 'border-red-500');
+            } else {
+                toastBox.classList.replace('border-red-500', 'border-gray-900');
+            }
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+
+</body>
+</html>

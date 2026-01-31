@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('partials/head') %>
+    <style>
+        /* 1. PAPER GRAIN TEXTURE */
+        .bg-noise {
+            background-color: #F9FAFB;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+        }
+
+        /* 2. Black Monochrome Gradient */
+        .text-gradient {
+            background: linear-gradient(to right, #000000, #4B5563);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* 3. Soft Glow */
+        .soft-glow {
+            box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .fade-in { animation: fadeIn 1s ease-out forwards; opacity: 0; }
+        .fade-in-delayed { animation: fadeIn 1s ease-out 0.3s forwards; opacity: 0; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-noise text-gray-800 flex flex-col min-h-screen overflow-x-hidden">
+
+    <%- include('partials/nav') %>
+
+    <main class="flex-grow container mx-auto px-5 md:px-8 mt-32 mb-2">
+        
+        <div class="max-w-4xl mx-auto text-center mb-12 relative z-10 fade-in">
+            
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-gray-200 shadow-sm mb-6">
+                <span class="w-1.5 h-1.5 rounded-full bg-black"></span>
+                <span class="text-[10px] md:text-xs font-bold text-gray-900 tracking-widest uppercase">Our Mission</span>
+            </div>
+
+            <h1 class="text-4xl md:text-6xl font-black text-gray-900 tracking-tight leading-[1.1] mb-6">
+                A space for <br class="hidden md:block" />
+                <span class="text-gradient">thoughtful conversation.</span>
+            </h1>
+
+            <p class="text-base md:text-xl text-gray-500 leading-relaxed max-w-2xl mx-auto">
+                We believe that everyone has a story worth telling. Our mission is to provide a minimalist, distraction-free environment for writers and readers to connect.
+            </p>
+        </div>
+
+        <div class="max-w-5xl mx-auto mb-20 relative fade-in-delayed">
+            <div class="absolute -top-20 -left-20 w-80 h-80 bg-gray-200 rounded-full mix-blend-multiply filter blur-3xl opacity-50 hidden md:block"></div>
+            <div class="absolute -bottom-20 -right-20 w-80 h-80 bg-gray-300 rounded-full mix-blend-multiply filter blur-3xl opacity-50 hidden md:block"></div>
+
+            <div class="relative bg-white p-2 md:p-3 rounded-[2rem] soft-glow border border-white">
+                <img 
+                    src="/images/about.avif" 
+                    alt="Minimal Office" 
+                    class="rounded-[1.5rem] w-full h-64 md:h-[500px] object-cover grayscale-[20%]"
+                >
+                
+                <div class="relative md:absolute md:bottom-8 md:left-12 -mt-8 md:mt-0 mx-4 md:mx-0 bg-white/95 backdrop-blur-xl p-6 md:p-8 rounded-2xl md:rounded-3xl shadow-xl border border-white/50 max-w-md z-10">
+                    <h3 class="font-bold text-xl md:text-2xl text-gray-900 mb-2 md:mb-3">Focus on what matters.</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">
+                        In a world full of noise, we offer silence. No intrusive ads, no cluttered sidebars—just your words on a clean digital canvas.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
+            
+            <div class="p-6 md:p-8 rounded-3xl bg-white border border-gray-100 shadow-sm hover:shadow-md transition-shadow group">
+                <div class="w-10 h-10 md:w-12 md:h-12 bg-gray-900 rounded-2xl flex items-center justify-center text-white mb-4 md:mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A10.003 10.003 0 0012 21a10.003 10.003 0 008.384-4.562l.054.09m-3.336-2.038A10.01 10.01 0 0020 15V7a2 2 0 00-2-2h-3.939a7.5 7.5 0 00-14.122 0H3a2 2 0 00-2 2v8c0 1.913.535 3.693 1.464 5.204"></path></svg>
+                </div>
+                <h3 class="text-lg md:text-xl font-bold text-gray-900 mb-2 md:mb-3">Authenticity</h3>
+                <p class="text-gray-500 text-sm leading-relaxed">We value real voices and raw perspectives. Our platform is built to amplify genuine human experiences.</p>
+            </div>
+
+            <div class="p-6 md:p-8 rounded-3xl bg-white border border-gray-100 shadow-sm hover:shadow-md transition-shadow group">
+                <div class="w-10 h-10 md:w-12 md:h-12 bg-gray-900 rounded-2xl flex items-center justify-center text-white mb-4 md:mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                </div>
+                <h3 class="text-lg md:text-xl font-bold text-gray-900 mb-2 md:mb-3">Performance</h3>
+                <p class="text-gray-500 text-sm leading-relaxed">Lightning fast. Your stories load instantly, anywhere in the world. No bloat, just content.</p>
+            </div>
+
+            <div class="p-6 md:p-8 rounded-3xl bg-white border border-gray-100 shadow-sm hover:shadow-md transition-shadow group">
+                <div class="w-10 h-10 md:w-12 md:h-12 bg-gray-900 rounded-2xl flex items-center justify-center text-white mb-4 md:mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                </div>
+                <h3 class="text-lg md:text-xl font-bold text-gray-900 mb-2 md:mb-3">Privacy</h3>
+                <p class="text-gray-500 text-sm leading-relaxed">Your data is yours. We respect your privacy and provide transparent tools to manage your content.</p>
+            </div>
+
+        </div>
+
+        <div class="max-w-4xl mx-auto text-center bg-gray-900 rounded-[2.5rem] p-10 md:p-16 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-gray-800 rounded-full mix-blend-overlay filter blur-3xl opacity-50 translate-x-1/2 -translate-y-1/2"></div>
+            
+            <div class="relative z-10">
+                <h2 class="text-2xl md:text-4xl font-black text-white mb-4 tracking-tight">Ready to share your story?</h2>
+                <p class="text-gray-400 mb-8 max-w-xl mx-auto text-base md:text-lg">Join thousands of writers who have found their home on Blogify. Start writing for free today.</p>
+                
+                <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                    <a href="/user/signup" class="px-8 py-3.5 bg-white text-gray-900 font-bold rounded-xl hover:bg-gray-100 transition-all transform hover:-translate-y-1 shadow-xl">
+                        Get Started
+                    </a>
+                    <a href="/blog/all" class="px-8 py-3.5 bg-transparent border border-gray-700 text-white font-bold rounded-xl hover:bg-gray-800 transition-all">
+                        Read Stories
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <%- include('partials/footer') %>
+
+</body>
+</html>
