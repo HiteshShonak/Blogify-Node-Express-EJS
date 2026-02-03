@@ -36,7 +36,10 @@ async function handlePostContact(req, res) {
     }
 
     const transporter = nodemailer.createTransport({
-        service: 'gmail',
+        host: 'smtp.gmail.com',
+        port: 587,
+        secure: false,
+        family: 4, // Force IPv4 to avoid ETIMEDOUT on IPv6-enabled environments
         auth: {
             user: process.env.GMAIL_USER,
             pass: process.env.GMAIL_PASS
@@ -44,8 +47,9 @@ async function handlePostContact(req, res) {
     });
 
     const mailOptions = {
-        from: `"${name}" <${email}>`,
-        to: process.env.GMAIL_USER, // Send to yourself
+        from: `"${name} (via Blogify)" <${process.env.GMAIL_USER}>`, // Send FROM auth user to avoid blocking
+        to: process.env.GMAIL_USER,
+        replyTo: email, // Allow replying directly to the user
         subject: `Blogify Contact: ${topic}`,
         html: `
             <h3>New Message from ${name}</h3>
@@ -60,8 +64,8 @@ async function handlePostContact(req, res) {
         await transporter.sendMail(mailOptions);
         return res.json({ status: 'success', message: 'Email sent successfully!' });
     } catch (error) {
-        console.error("Email Error:", error);
-        return res.status(500).json({ error: "Failed to send email" });
+        console.error("Contact Email Error:", error);
+        return res.status(500).json({ error: "Failed to send email. Check server logs." });
     }
 }
 
@@ -72,8 +76,17 @@ async function handlePostSubscribe(req, res) {
         return res.status(400).json({ error: "Email is required" });
     }
 
+    // Check if env variables are loaded (Critical for Render)
+    if (!process.env.GMAIL_USER || !process.env.GMAIL_PASS) {
+        console.error("Subscription Error: Missing GMAIL_USER or GMAIL_PASS env variables.");
+        return res.status(500).json({ error: "Server Configuration Error" });
+    }
+
     const transporter = nodemailer.createTransport({
-        service: 'gmail',
+        host: 'smtp.gmail.com',
+        port: 587,
+        secure: false, // true for 465, false for other ports
+        family: 4,
         auth: {
             user: process.env.GMAIL_USER,
             pass: process.env.GMAIL_PASS
@@ -115,8 +128,8 @@ async function handlePostSubscribe(req, res) {
         await transporter.sendMail(mailOptions);
         return res.json({ status: 'success', message: 'Subscribed successfully!' });
     } catch (error) {
-        console.error("Subscription Error:", error);
-        return res.status(500).json({ error: "Failed to subscribe" });
+        console.error("Subscription Email Error:", error);
+        return res.status(500).json({ error: "Failed to subscribe. Check server logs." });
     }
 }
 
