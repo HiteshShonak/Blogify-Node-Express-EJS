@@ -118,10 +118,10 @@ app.listen(port, () => {
     console.log(`http://localhost:${port}`);
 
     // Debug Logging for Email Config
-    if (process.env.GMAIL_USER && process.env.GMAIL_PASS) {
-        console.log("✅ Email Configuration detected.");
+    if (process.env.RESEND_API_KEY) {
+        console.log("✅ Email Configuration detected (Resend API).");
     } else {
         console.log("❌ Email Configuration MISSING. Contact and Subscribe will fail.");
-        console.log("   --> Check Render Environment Variables.");
+        console.log("   --> Add RESEND_API_KEY to your environment variables.");
     }
 });
