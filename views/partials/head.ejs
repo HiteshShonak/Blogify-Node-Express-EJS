@@ -1,37 +1,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title><%= locals.title ? title : "Blogify" %></title>
+<title>
+    <%= locals.title ? title : "Blogify" %>
+</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="icon" type="image/webp" href="/images/favicon.webp">
-<script src="https://cdn.tailwindcss.com"></script>
 
-<script>
-    tailwind.config = {
-        theme: {
-            extend: {
-                fontFamily: {
-                    sans: ['Inter', 'sans-serif'],
-                },
-                fontSize: {
-                    'fluid-h1': 'clamp(1.5rem, 5vw, 3rem)', 
-                    'fluid-h2': 'clamp(1.25rem, 3vw, 2.25rem)',
-                    'fluid-base': 'clamp(1rem, 1.5vw, 1.125rem)',
-                },
-                colors: {
-                    brand: {
-                        50: '#eff6ff',
-                        100: '#dbeafe',
-                        600: '#2563eb',
-                        900: '#1e3a8a',
-                    }
-                }
-            }
-        }
-    }
-</script>
 
 <link rel="stylesheet" href="/css/style.css">

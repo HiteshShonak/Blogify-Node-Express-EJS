@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+@theme {
+    --font-sans: 'Inter', sans-serif;
+    --color-brand-50: #eff6ff;
+    --color-brand-100: #dbeafe;
+    --color-brand-600: #2563eb;
+    --color-brand-900: #1e3a8a;
+    --text-fluid-h1: clamp(1.5rem, 5vw, 3rem);
+    --text-fluid-h2: clamp(1.25rem, 3vw, 2.25rem);
+    --text-fluid-base: clamp(1rem, 1.5vw, 1.125rem);
+}
