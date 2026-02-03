@@ -3,7 +3,7 @@ const ViewLog = require('../models/viewLog');
 const Comment = require('../models/comment');
 const { uploadToCloudinary, cloudinary } = require('../services/upload');
 
-// Extract Public ID from URL
+// Extract Cloudinary public ID from image URL
 function getPublicIdFromUrl(url) {
     try {
         if (!url) return null;
@@ -43,7 +43,7 @@ async function handlePostAddBlog(req, res) {
     let uploadedPublicId = null;
 
     try {
-        // Upload to Cloudinary
+        // Upload cover image
         const result = await uploadToCloudinary(req.file.buffer, req.file.originalname);
         uploadedPublicId = result.public_id;
 
@@ -60,7 +60,7 @@ async function handlePostAddBlog(req, res) {
         return res.status(201).json({ status: "success", redirect: `/blog/${blog.urlSlug}` });
 
     } catch (error) {
-        // Delete uploaded image if DB save fails
+        // Rollback image upload if blog creation fails
         if (uploadedPublicId) {
             cloudinary.uploader.destroy(uploadedPublicId).catch(err =>
                 console.error("Cleanup Error:", err)
@@ -121,7 +121,7 @@ async function handlePostEditBlog(req, res) {
 
         await blog.save();
 
-        // Delete old image after successful save
+        // Clean up old cover image after update
         if (req.file && oldImageURL && !oldImageURL.includes('default-cover')) {
             const publicId = getPublicIdFromUrl(oldImageURL);
             if (publicId) {
@@ -134,7 +134,7 @@ async function handlePostEditBlog(req, res) {
         return res.status(200).json({ status: "success", redirect: `/blog/${blog.urlSlug}` });
 
     } catch (error) {
-        // Delete new image if save fails
+        // Rollback new image if update fails
         if (uploadedPublicId) {
             cloudinary.uploader.destroy(uploadedPublicId).catch(err =>
                 console.error("New Image Cleanup Error:", err)

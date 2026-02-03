@@ -14,7 +14,7 @@ async function handleGetHome(req, res) {
         });
     } catch (error) {
         console.error("Home Error:", error);
-        // Render empty home on error to prevent crash
+        // Show empty home if database fails
         res.render('home', { user: req.user, blogs: [] });
     }
 }
@@ -30,7 +30,6 @@ async function handleGetContact(req, res) {
 async function handlePostContact(req, res) {
     const { name, email, topic, message } = req.body;
 
-    // Check if env variables are loaded
     if (!process.env.RESEND_API_KEY) {
         console.error("Missing RESEND_API_KEY environment variable");
         return res.status(500).json({ error: "Server Email Configuration Missing" });
@@ -39,7 +38,7 @@ async function handlePostContact(req, res) {
     const resend = new Resend(process.env.RESEND_API_KEY);
 
     try {
-        // 1. Send notification to admin
+        // Send admin notification
         await resend.emails.send({
             from: 'Blogify <onboarding@resend.dev>',
             to: process.env.GMAIL_USER || 'contact.blogify@gmail.com',
@@ -53,7 +52,7 @@ async function handlePostContact(req, res) {
             `
         });
 
-        // 2. Send confirmation to user
+        // Send user confirmation
         await resend.emails.send({
             from: 'Blogify <onboarding@resend.dev>',
             to: email,
@@ -85,9 +84,8 @@ async function handlePostSubscribe(req, res) {
         return res.status(400).json({ error: "Email is required" });
     }
 
-    // Check if env variables are loaded (Critical for Render)
     if (!process.env.RESEND_API_KEY) {
-        console.error("Subscription Error: Missing RESEND_API_KEY environment variable.");
+        console.error("Subscription Error: Missing RESEND_API_KEY environment variable");
         return res.status(500).json({ error: "Server Configuration Error" });
     }
 
@@ -97,7 +95,7 @@ async function handlePostSubscribe(req, res) {
         await resend.emails.send({
             from: 'Blogify Team <onboarding@resend.dev>',
             to: email,
-            subject: "Welcome to the Blogify Community! 🚀",
+            subject: "Welcome to the Blogify Community",
             html: `
                 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden;">
                     <div style="background-color: #111827; padding: 30px; text-align: center;">
@@ -131,6 +129,10 @@ async function handlePostSubscribe(req, res) {
     }
 }
 
+async function handleGetHealth(req, res) {
+    return res.status(200).json({ status: 'active', server: 'Blogify' });
+}
+
 module.exports = {
     handleGetHome,
     handleGetAbout,
@@ -139,7 +141,3 @@ module.exports = {
     handlePostSubscribe,
     handleGetHealth
 };
-
-async function handleGetHealth(req, res) {
-    return res.status(200).json({ status: 'active', server: 'Blogify' });
-}

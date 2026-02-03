@@ -66,18 +66,18 @@ async function handleGetLogout(req, res) {
 
 async function handleGetProfile(req, res) {
   try {
-    // Fetch all blogs by this user (Sorted by newest)
+    // Get all user's blogs sorted by newest
     const allBlogs = await Blog.find({ createdBy: req.user._id }).sort({ createdAt: -1 });
 
-    // Separate Active vs Drafts
+    // Split into active vs drafts
     const activeBlogs = allBlogs.filter(b => b.status === 'active');
     const draftBlogs = allBlogs.filter(b => b.status === 'draft');
 
-    // Calculate Stats
+    // Calculate stats
     const totalViews = allBlogs.reduce((acc, blog) => acc + blog.views, 0);
     const totalLikes = allBlogs.reduce((acc, blog) => acc + blog.likes.length, 0);
 
-    // Find Best Performing Post
+    // Find best performing post
     const bestBlog = [...activeBlogs].sort((a, b) => b.trendingScore - a.trendingScore)[0];
 
     res.render('profile', {

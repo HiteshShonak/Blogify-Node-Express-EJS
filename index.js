@@ -64,48 +64,6 @@ app.locals.optimizeImage = (url, type) => {
 
 
 app.use('/', staticRouter);
-
-// Temporary Diagnostic Route
-app.get('/test-email-connection', async (req, res) => {
-    const net = require('net');
-
-    const checkPort = (port) => {
-        return new Promise((resolve) => {
-            const socket = new net.Socket();
-            const start = Date.now();
-
-            socket.setTimeout(5000); // 5s timeout
-
-            socket.on('connect', () => {
-                const time = Date.now() - start;
-                socket.destroy();
-                resolve({ port, status: 'OPEN', time: `${time}ms` });
-            });
-
-            socket.on('timeout', () => {
-                socket.destroy();
-                resolve({ port, status: 'TIMEOUT', time: '>5000ms' });
-            });
-
-            socket.on('error', (err) => {
-                socket.destroy();
-                resolve({ port, status: 'ERROR', error: err.message });
-            });
-
-            socket.connect(port, 'smtp.gmail.com');
-        });
-    };
-
-    const results = await Promise.all([checkPort(587), checkPort(465)]);
-    res.json({
-        server: 'Render',
-        results,
-        envCheck: {
-            user: !!process.env.GMAIL_USER,
-            pass: !!process.env.GMAIL_PASS
-        }
-    });
-});
 app.use('/user', userRouter);
 app.use('/blog', blogRouter);
 
@@ -117,11 +75,9 @@ app.listen(port, () => {
     console.log(`Server Started!`);
     console.log(`http://localhost:${port}`);
 
-    // Debug Logging for Email Config
     if (process.env.RESEND_API_KEY) {
-        console.log("✅ Email Configuration detected (Resend API).");
+        console.log("Email Configuration: Resend API detected");
     } else {
-        console.log("❌ Email Configuration MISSING. Contact and Subscribe will fail.");
-        console.log("   --> Add RESEND_API_KEY to your environment variables.");
+        console.log("Email Configuration: MISSING - Add RESEND_API_KEY to environment variables");
     }
 });
