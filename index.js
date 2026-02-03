@@ -12,9 +12,9 @@ const staticRouter = require('./routes/staticRouter.js');
 const Blog = require('./models/blog');
 
 mongoose.connect(process.env.MONGODB_URL).then(() => {
-  console.log('Connected to MongoDB');
+    console.log('Connected to MongoDB');
 }).catch((err) => {
-  console.log('Error connecting to MongoDB:', err);
+    console.log('Error connecting to MongoDB:', err);
 });
 
 app.set('view engine', 'ejs');
@@ -31,35 +31,33 @@ app.use((req, res, next) => {
     next();
 });
 
-// ==========================================
-// NEW: IMAGE OPTIMIZER HELPER (BALANCED)
-// ==========================================
+// Image optimizer helper
 app.locals.optimizeImage = (url, type) => {
-    if (!url || !url.includes('cloudinary.com')) return url; 
+    if (!url || !url.includes('cloudinary.com')) return url;
 
     const uploadIndex = url.indexOf('/upload/');
     if (uploadIndex === -1) return url;
 
     let params = '';
     switch (type) {
-        case 'card': 
+        case 'card':
             params = 'w_800,c_fill,q_auto:good,f_auto,e_sharpen:20';
             break;
-            
+
         case 'detail':
             params = 'w_1920,c_limit,q_auto:good,f_auto,e_sharpen:20';
             break;
-            
+
         case 'mobile':
             params = 'w_800,c_limit,q_auto:good,f_auto';
             break;
 
         default:
-            params = 'q_auto,f_auto'; 
+            params = 'q_auto,f_auto';
     }
 
-    const part1 = url.slice(0, uploadIndex + 8); 
-    const part2 = url.slice(uploadIndex + 8);    
+    const part1 = url.slice(0, uploadIndex + 8);
+    const part2 = url.slice(uploadIndex + 8);
 
     return `${part1}${params}/${part2}`;
 };
@@ -74,6 +72,6 @@ app.use((req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server Started!`);
-  console.log(`http://localhost:${port}`);
+    console.log(`Server Started!`);
+    console.log(`http://localhost:${port}`);
 });

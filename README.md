@@ -35,8 +35,8 @@ A robust blogging platform focused on performance, reading experience, and conte
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/blog-app.git
-   cd blog-app
+   git clone https://github.com/HiteshShonak/Blogify-Node-Express-EJS.git
+   cd Blogify-Node-Express-EJS
    ```
 2. **Install dependencies**
    ```bash
@@ -52,8 +52,9 @@ A robust blogging platform focused on performance, reading experience, and conte
    CLOUDINARY_API_KEY=your_api_key
    CLOUDINARY_API_SECRET=your_api_secret
    TINYMCE_API_KEY=your_tinymce_key
-   EMAIL_USER=your_email@gmail.com
-   EMAIL_PASS=your_app_password
+   GMAIL_USER=your_email@gmail.com
+   GMAIL_PASS=your_app_password
+   BASE_URL=http://localhost:8000
    ```
 4. **Start the server**
    ```bash
